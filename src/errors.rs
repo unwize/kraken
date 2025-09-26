@@ -1,11 +1,13 @@
-use miette::Diagnostic;
 use thiserror::Error;
 
-#[derive(Error, Diagnostic, Debug)]
+#[derive(Error, Debug)]
 pub enum KrakenError {
     #[error("IO Error")]
-    IoError,
+    IO,
 
-    #[error("Enum Conversion Error")]
-    EnumError,
+    #[error("Invalid enum value error: {0}")]
+    Enum(String),
+
+    #[error("Error")]
+    Error,
 }

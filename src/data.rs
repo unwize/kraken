@@ -1,5 +1,5 @@
+use serde::{Deserialize, Serialize};
 use crate::errors::KrakenError;
-use miette::{ Result};
 
 pub mod make;
 
@@ -12,7 +12,7 @@ pub enum TransactionKind {
 }
 
 impl Into<u8> for TransactionKind {
-    fn into(self) -> usize {
+    fn into(self) -> u8 {
         match self {
             TransactionKind::DEPOSIT => 0,
             TransactionKind::WITHDRAW => 1,
@@ -35,7 +35,7 @@ impl TryFrom<u8> for TransactionKind {
             2 => Ok(TransactionKind::DISPUTE),
             3 => Ok(TransactionKind::RESOLVE),
             4 => Ok(TransactionKind::CHARGEBACK),
-            _ => Err(KrakenError::EnumError)
+            _ => Err(KrakenError::Enum(v.to_string()))
         }
     }
 }
@@ -52,7 +52,7 @@ impl TryFrom<String> for TransactionKind {
             "dispute" => Ok(TransactionKind::DISPUTE),
             "resolve" => Ok(TransactionKind::RESOLVE),
             "chargeback" => Ok(TransactionKind::CHARGEBACK),
-            _ => Err(KrakenError::EnumError)
+            _ => Err(KrakenError::Enum(v.to_string()))
         }
     }
 }
@@ -67,7 +67,7 @@ impl TryFrom<&str> for TransactionKind {
             "dispute" => Ok(TransactionKind::DISPUTE),
             "resolve" => Ok(TransactionKind::RESOLVE),
             "chargeback" => Ok(TransactionKind::CHARGEBACK),
-            _ => Err(KrakenError::EnumError)
+            _ => Err(KrakenError::Enum(v.into()))
         }
     }
 }
@@ -239,4 +239,13 @@ impl Transaction for ResolveTransaction {
     fn get_client(&self) -> u16 {
         self.client
     }
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct Row {
+    #[serde(alias="type")]  // TODO: Implement custom deserializer that directly transforms to Enum
+    pub kind: String,
+    pub client: u16,
+    pub tx: u32,
+    pub amount: f64,
 }

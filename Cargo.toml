@@ -5,8 +5,9 @@ edition = "2024"
 
 [dependencies]
 csv-async = { version = "1.3.1", features = ["tokio", "tokio-stream"] }
-miette = { version = "7.6.0", features = ["fancy"] }
 tokio = { version = "1.45.1", features = ["rt", "rt-multi-thread", "macros", "fs"] }
 thiserror = "2.0.12"
 tokio-stream = "0.1.17"
 serde = { version = "1.0.227", features = ["derive"] }
+polars = { version = "0.51.0", features = ["lazy"] }
+anyhow = "1.0.100"

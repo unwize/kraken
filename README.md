@@ -10,9 +10,8 @@ For some, Tokio and Polars may be second-nature--but I've not used them much, an
 ## Dependencies
 The top-level dependencies are as follows:
 
-- [Miette](https://github.com/zkat/miette): Diagnostics and Error Handling
+- Anyhow: Generic `Result` carrier that acts as an intermediate for different `impl StdError` types, _because nobody got time for that_.
   - [Trace](https://github.com/tokio-rs/tracing): Proper tracing and diagnostics (Stretch goal)
-- [csv-async](https://docs.rs/csv-async/latest/csv_async/): Async CSV reader that supports streaming
 - [Tokio](https://docs.rs/tokio/latest/tokio/): Async runtime
 - [Polars](https://github.com/pola-rs/polars): Data query engine (Rust version of Pandas, kind-of)
   - [Columnar data format](https://arrow.apache.org/docs/format/Columnar.html)
