@@ -35,7 +35,7 @@ fn main()  -> Result<()>{
 
     let lazy_data: LazyFrame = parse_csv(path.to_str().unwrap())?;
     let client_accounts: HashMap<u16, HashMap<u32, Vec<Box<dyn Transaction>>>> = HashMap::new();
-    println!("{}", lazy_data.with_row_index("index", None).group_by([col("client")]).agg([]).collect()?);
+    println!("{}", lazy_data.with_row_index("index", None).group_by([col("client")]).agg([col("type"), col("tx"), col("amount"), col("index")]).collect()?);
 
     Ok(())
 }
