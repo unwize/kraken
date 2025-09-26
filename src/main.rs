@@ -9,6 +9,7 @@ use crate::data::Transaction;
 use crate::errors::KrakenError;
 use polars::prelude::*;
 use anyhow::Result;
+use crate::errors::KrakenError::Error;
 
 // I debated between this LazyFrame implementation and streaming with `csv-async`. This was far less
 // verbose and might actually tolerate very-large datasets.
@@ -22,18 +23,19 @@ fn parse_csv(file_in: &str) -> Result<LazyFrame> {
 fn main()  -> Result<()>{
     let args: Vec<String> = env::args().collect();
 
-    if args.is_empty() {
-        println!("Invalid arguments: Must supply path to data csv")
+    if args.len() < 2 {
+        println!("Invalid arguments: Must supply path to data csv");
+        Err(Error)?
     }
 
-    let path = Path::new(&args[0]);
+    let path = Path::new(&args[1]);
     if !path.exists() {
         Err(KrakenError::IO)?
     }
 
     let lazy_data: LazyFrame = parse_csv(path.to_str().unwrap())?;
     let client_accounts: HashMap<u16, HashMap<u32, Vec<Box<dyn Transaction>>>> = HashMap::new();
-    println!("{}", lazy_data.with_row_index("index", None).group_by([col("client")]).agg([col("client")]).collect()?);
+    println!("{}", lazy_data.with_row_index("index", None).group_by([col("client")]).agg([]).collect()?);
 
     Ok(())
 }
