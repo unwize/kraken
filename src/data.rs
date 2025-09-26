@@ -1,4 +1,3 @@
-use serde::{Deserialize, Serialize};
 use crate::errors::KrakenError;
 
 pub mod make;
@@ -239,13 +238,4 @@ impl Transaction for ResolveTransaction {
     fn get_client(&self) -> u16 {
         self.client
     }
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct Row {
-    #[serde(alias="type")]  // TODO: Implement custom deserializer that directly transforms to Enum
-    pub kind: String,
-    pub client: u16,
-    pub tx: u32,
-    pub amount: f64,
 }
